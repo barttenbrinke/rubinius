@@ -57,6 +57,12 @@ describe "String#tr" do
 
   it "supports non-injective replacements" do
     "hello".tr("helo", "1212").should == "12112"
+    
+    # 104 => 49   h => 1
+    # 101 => 50   e => 2
+    # 108 => 50   l => 2
+    # 111 => 50   o => 2
+    #
   end
 
   it "tries to convert from_str and to_str to strings using to_str" do

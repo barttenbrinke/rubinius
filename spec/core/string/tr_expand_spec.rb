@@ -1,6 +1,12 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 describe "String#tr_expand!" do
+  it "should expand 1212" do
+    s = "1212"
+    s.tr_expand!(nil, false).should == 4
+    s.should == "1212"
+  end
+  
   it "replaces self with a string with all sequences expanded" do
     s = "a-g"
     s.tr_expand!(nil, true).should == 7
