@@ -197,10 +197,6 @@ namespace rubinius {
     // Rubinius.primitive :string_apply_and
     String* apply_and(STATE, String* other);
 
-    // Rubinius.primitive :string_tr_expand
-    Fixnum* tr_expand(STATE, Object* limit, Object* invalid_as_empty);
-    Fixnum* tr_replace(STATE, struct tr_data* data);
-
     // Rubinius.primitive :string_copy_from
     String* copy_from(STATE, String* other, Fixnum* start, Fixnum* size, Fixnum* dest);
 

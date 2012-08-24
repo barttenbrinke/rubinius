@@ -997,8 +997,48 @@ class String
   end
 
   def tr_expand!(limit, invalid_as_empty)
-    Rubinius.primitive :string_tr_expand
-    raise PrimitiveFailure, "String#tr_expand primitive failed"
+    return @num_bytes unless self.include?('-')
+    return 0 if @num_bytes == 0
+    
+    return_string = ""
+    limit ||= -1
+    modified = false
+    i = 0
+    i = 1 if @data[0] == 94 # ^
+
+    while (i < @num_bytes) do
+      break if return_string.length == limit
+      
+      c = @data[i]
+      return_string << c.chr
+      seq = ((i+1) < @num_bytes) ? @data[i+1] : -1
+      
+      if seq == 45 # '-'
+        i+=1
+        max = ((i+1) < @num_bytes) ? @data[i+1] : -1
+        if (c == 45 || max == -1 || c >= max)
+          raise ArgumentError
+        else
+          c+=1
+          while (c < max) do
+            break if return_string.length == limit
+            return_string << c.chr
+            c+=1
+          end
+        end
+
+        modified = true
+      end
+      i+=1
+    end
+    
+    if modified
+      self.modify!
+      @data = return_string.data
+      @num_bytes = return_string.num_bytes
+    end
+    
+    Rubinius::Type.coerce_to @num_bytes, Fixnum, :to_int
   end
 
   def justify(width, direction, padstr=" ")

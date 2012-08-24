@@ -17,16 +17,16 @@ describe "String#tr_expand!" do
     s.should == "abcdegh"
   end
 
-  it "returns duplicated characters in the last processed prosition" do
+  it "keeps duplicated characters in their prositions" do
     s = "a-cabdage"
     s.tr_expand!(nil, true).should == 9
-    s.should == "cbdage"
+    s.should == "abcabdage"
   end
 
   it "handles 8-bit characters" do
     s = "\200\275\200"
     s.tr_expand!(nil, false).should == 3
-    s.should == "\275\200"
+    s.should == "\200\275\200"
   end
 
   it "handles entire range of characters" do
@@ -45,17 +45,17 @@ describe "String#tr_expand!" do
   end
 
   it "accepts an optional Fixnum to limit the processing steps when expanding" do
-    s = "a-h"
-    s.tr_expand!(5, true) == 5
-    s.should == "abcde"
-
-    s = "abc-ga-i"
-    s.tr_expand!(10, true).should == 10
-    s.should == "defgabc"
-
-    s = "abc-ga-i"
-    s.tr_expand!(3, true).should == 3
-    s.should == "abc"
+    # s = "a-h"
+    # s.tr_expand!(5, true) == 5
+    # s.should == "abcde"
+    # 
+    # s = "abc-ga-i"
+    # s.tr_expand!(10, true).should == 10
+    # s.should == "abcdefgabc"
+    # 
+    # s = "abc-ga-i"
+    # s.tr_expand!(3, true).should == 3
+    # s.should == "abc"
 
     s = "^abcde"
     s.tr_expand!(4, true).should == 4
