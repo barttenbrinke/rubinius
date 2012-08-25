@@ -2,6 +2,8 @@
 
 class String
   include Enumerable
+  
+  TR_SKIP_BAD_SEQUENCE = true
 
   def self.allocate
     str = super()
