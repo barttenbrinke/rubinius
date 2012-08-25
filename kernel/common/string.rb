@@ -1006,20 +1006,28 @@ class String
     limit ||= -1
     bytes = @num_bytes
     i = (bytes > 1 && @data[0] == 94) ? 1 : 0; # 94='^'
-    
+
     while (i < bytes) do
       break if limit > 0 && return_string.length >= limit
       chr = @data[i]
       i+=1
       seq = (i < bytes) ? @data[i] : -1
 
-      if chr == 92 && seq >=0 # '\\'
+      if chr == 92 && seq >= 0 # '\\'
         next
       elsif seq == 45 # '-'
         i+=1
         max = (i < bytes) ? @data[i] : -1
         if max >= 0 && chr > max && !TR_SKIP_BAD_SEQUENCE
-          raise ArgumentError
+          message = ""
+          if (max >=48 && max <= 122 && chr >= 48 && chr <= 122)
+            message << "invalid range \""
+            message << "#{chr.chr}-#{max.chr} \""
+            message << " in string transliteration"
+          else
+            message = "invalid range in string transliteration"
+          end
+          raise ArgumentError, message
         elsif max >= 0 && chr > max && invalid_as_empty
           i+=1;
         elsif max >=0
